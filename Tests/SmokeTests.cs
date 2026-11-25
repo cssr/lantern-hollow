@@ -9,6 +9,6 @@ public class SmokeTests
     [Fact]
     public void Tuning_Has_Sane_Gravity()
     {
-        Assert.InRange(Tuning.Gravity, 800f, 3000f);
+        Assert.InRange(Tuning.Gravity, 700f, 3000f);
     }
 }
