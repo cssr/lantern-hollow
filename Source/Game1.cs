@@ -12,16 +12,27 @@ public class Game1 : Microsoft.Xna.Framework.Game
     private Texture2D _pipTexture;
     private KeyboardState _previousKeyboard;
 
+    // Platforms the player can stand on.
+    private readonly Platform[] _platforms;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+
+        // Three platforms at the specified positions.
+        _platforms = new Platform[]
+        {
+            new Platform(150f, 360f),
+            new Platform(280f, 290f),
+            new Platform(620f, 360f),
+        };
     }
 
     protected override void Initialize()
     {
-        _player = new Player();
+        _player = new Player(_platforms);
         _previousKeyboard = Keyboard.GetState();
 
         base.Initialize();
@@ -55,6 +66,12 @@ public class Game1 : Microsoft.Xna.Framework.Game
 
         _spriteBatch.Begin();
         _spriteBatch.Draw(_pipTexture, _player.Rectangle, Color.White);
+
+        // Draw platforms as solid white rectangles.
+        foreach (var platform in _platforms)
+        {
+            _spriteBatch.Draw(_pipTexture, platform.Bounds, Color.Gray);
+        }
         _spriteBatch.End();
 
         base.Draw(gameTime);
