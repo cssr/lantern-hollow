@@ -8,4 +8,7 @@ public static class Tuning
     public const float Gravity = 1800f;    // pixels per second, per second
     public const float JumpSpeed = 588f;   // pixels per second, upwards
     public const float FloorY = 440f;      // ground level; Pip rests above it
+    public const float PatrolSpeed = 80f;   // pixels per second
+    public const int GuardWidth = 32;       // guard rectangle width
+    public const int GuardHeight = 48;      // guard rectangle height
 }

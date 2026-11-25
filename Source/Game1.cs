@@ -15,6 +15,9 @@ public class Game1 : Microsoft.Xna.Framework.Game
     // Platforms the player can stand on.
     private readonly Platform[] _platforms;
 
+    // Guard for the third platform.
+    private Guard _guard;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -28,6 +31,13 @@ public class Game1 : Microsoft.Xna.Framework.Game
             new Platform(280f, 290f),
             new Platform(620f, 360f),
         };
+
+        // Guard patrols the third platform.
+        //_guard = new Guard(_platforms[2].Bounds);
+        var first = _platforms[0].Bounds;
+        var third = _platforms[2].Bounds;
+        var walkArea = new Rectangle(first.Left, 440, third.Right - first.Left, 16);
+        _guard = new Guard(walkArea);
     }
 
     protected override void Initialize()
@@ -57,6 +67,8 @@ public class Game1 : Microsoft.Xna.Framework.Game
         _player.Update((float)gameTime.ElapsedGameTime.TotalSeconds, keyboard, _previousKeyboard);
         _previousKeyboard = keyboard;
 
+        _guard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
         base.Update(gameTime);
     }
 
@@ -72,6 +84,9 @@ public class Game1 : Microsoft.Xna.Framework.Game
         {
             _spriteBatch.Draw(_pipTexture, platform.Bounds, Color.Gray);
         }
+
+        // Draw guard bounds as teal rectangle.
+        _spriteBatch.Draw(_pipTexture, _guard.Bounds, Color.Teal);
         _spriteBatch.End();
 
         base.Draw(gameTime);
