@@ -8,4 +8,8 @@ public static class Tuning
     public const float Gravity = 1800f;    // pixels per second, per second
     public const float JumpSpeed = 588f;   // pixels per second, upwards
     public const float FloorY = 440f;      // ground level; Pip rests above it
+    public const float SightRange = 220f;
+    public const float LoseRange = 300f;
+    public const float ArriveDistance = 12f;
+    public const float VisionHeight = 96f;
 }
