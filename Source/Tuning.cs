@@ -2,6 +2,7 @@ namespace LanternHollow;
 
 // All game numbers live here. Units: pixels and seconds. Y points down.
 // With these values the jump peak is JumpSpeed^2 / (2 * Gravity) = 96 px.
+// MaxHealth: starting hearts. InvulnerableTime: seconds of invincibility after a hit.
 public static class Tuning
 {
     public const float MoveSpeed = 220f;   // pixels per second
@@ -14,4 +15,6 @@ public static class Tuning
     public const float ArriveDistance = 12f;   // pixels - stop when within this distance of player's x
     public const int GuardWidth = 32;       // guard rectangle width
     public const int GuardHeight = 48;      // guard rectangle height
+    public const int MaxHealth = 3;
+    public const float InvulnerableTime = 1f;
 }

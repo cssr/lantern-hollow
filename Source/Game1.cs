@@ -33,7 +33,6 @@ public class Game1 : Microsoft.Xna.Framework.Game
         };
 
         // Guard patrols the third platform.
-        //_guard = new Guard(_platforms[2].Bounds);
         var first = _platforms[0].Bounds;
         var third = _platforms[2].Bounds;
         var walkArea = new Rectangle(first.Left, 440, third.Right - first.Left, 16);
@@ -66,9 +65,20 @@ public class Game1 : Microsoft.Xna.Framework.Game
         KeyboardState keyboard = Keyboard.GetState();
         _player.Update((float)gameTime.ElapsedGameTime.TotalSeconds, keyboard, _previousKeyboard);
         _previousKeyboard = keyboard;
-
+// Update guard AI
         var playerFeet = new Vector2(_player.Rectangle.X + _player.Rectangle.Width / 2f, _player.Rectangle.Y + _player.Rectangle.Height);
         _guard.Update((float)gameTime.ElapsedGameTime.TotalSeconds, playerFeet);
+
+        // Check if Pip intersects guard - if so, take a hit
+        if (_player.Rectangle.Intersects(_guard.Bounds))
+        {
+            _player.TakeHit();
+        }
+
+        // Also remove the player from the guard if they're not intersecting
+        // (this prevents repeated hits while standing in the guard's area
+        // after invulnerability expires - the guard will still detect intersection
+        // but TakeHit will be no-op during invulnerability)
 
         base.Update(gameTime);
     }
@@ -78,7 +88,10 @@ public class Game1 : Microsoft.Xna.Framework.Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         _spriteBatch.Begin();
-        _spriteBatch.Draw(_pipTexture, _player.Rectangle, Color.White);
+
+        // Draw Pip with invulnerability transparency
+        Color drawColor = _player.IsInvulnerable ? Color.White * 0.5f : Color.White;
+        _spriteBatch.Draw(_pipTexture, _player.Rectangle, drawColor);
 
         // Draw platforms as solid white rectangles.
         foreach (var platform in _platforms)
@@ -88,6 +101,13 @@ public class Game1 : Microsoft.Xna.Framework.Game
 
         // Draw guard bounds as teal rectangle.
         _spriteBatch.Draw(_pipTexture, _guard.Bounds, Color.Teal);
+
+        // Draw health hearts at top left - one white square per heart
+        for (int i = 0; i < _player.Health; i++)
+        {
+            _spriteBatch.Draw(_pipTexture, new Rectangle(10 + i * 10, 10, 8, 8), Color.White);
+        }
+
         _spriteBatch.End();
 
         base.Draw(gameTime);

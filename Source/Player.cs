@@ -16,6 +16,11 @@ public class Player
     public Vector2 Velocity { get; set; }
     public bool OnGround { get; set; }
 
+    // Player health and invulnerability
+    private int _health;
+    private float _invulnerableTimer;
+    private Vector2 _startPosition;
+
     // Platforms the player can stand on.
     private readonly Platform[] _platforms;
 
@@ -29,12 +34,41 @@ public class Player
         OnGround = true;
         _platforms = platforms;
         _lastPosition = Position;
+        _health = Tuning.MaxHealth;
+        _startPosition = Position;
     }
 
     public Rectangle Rectangle => new Rectangle((int)Position.X, (int)Position.Y, (int)Width, (int)Height);
 
+    public int Health => _health;
+
+    public bool IsInvulnerable => _invulnerableTimer > 0;
+
+    public void TakeHit()
+    {
+        if (_invulnerableTimer > 0)
+            return;
+
+        _health--;
+        _invulnerableTimer = Tuning.InvulnerableTime;
+
+        if (_health <= 0)
+        {
+            _health = Tuning.MaxHealth;
+            Position = _startPosition;
+        }
+    }
+
     public void Update(float deltaSeconds, KeyboardState current, KeyboardState previous)
     {
+        // Count down invulnerable timer
+        if (_invulnerableTimer > 0)
+        {
+            _invulnerableTimer -= deltaSeconds;
+            if (_invulnerableTimer < 0)
+                _invulnerableTimer = 0;
+        }
+
         // Horizontal input -> target velocity.
         float direction = 0f;
         // Arrow keys and A/D both move left; arrows and D both move right.
