@@ -67,7 +67,8 @@ public class Game1 : Microsoft.Xna.Framework.Game
         _player.Update((float)gameTime.ElapsedGameTime.TotalSeconds, keyboard, _previousKeyboard);
         _previousKeyboard = keyboard;
 
-        _guard.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+        var playerFeet = new Vector2(_player.Rectangle.X + _player.Rectangle.Width / 2f, _player.Rectangle.Y + _player.Rectangle.Height);
+        _guard.Update((float)gameTime.ElapsedGameTime.TotalSeconds, playerFeet);
 
         base.Update(gameTime);
     }
